@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PeopleVoice - Modern Civic Issue Reporting</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="header-shell">
+    <div class="header-container">
+      <a href="#" class="logo-link" id="logo-btn">
+        <div class="logo-badge">P</div>
+        <div class="logo-copy">
+          <span class="logo-text">PeopleVoice</span>
+          <span class="logo-tag">Civic Issue Reporting</span>
+        </div>
+      </a>
+      <nav class="nav-links">
+        <button class="nav-btn active" id="nav-home"><i class="fa-solid fa-house"></i> Home</button>
+        <button class="nav-btn" id="nav-my-complaints" style="display: none;"><i class="fa-solid fa-clipboard-list"></i> My Complaints</button>
+        <button class="nav-btn" id="nav-admin" style="display: none;"><i class="fa-solid fa-toolbox"></i> Admin</button>
+        <button class="nav-btn nav-btn-highlight" id="nav-report"><i class="fa-solid fa-plus-circle"></i> Report</button>
+        <button class="nav-btn" id="nav-auth"><i class="fa-solid fa-user-circle"></i> Login / Register</button>
+      </nav>
+      <div class="user-profile-widget" id="user-profile-widget" style="display: none;">
+        <span class="user-badge" id="user-display-name">Citizen</span>
+        <button class="nav-btn nav-btn-ghost" id="nav-logout"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Page Wrapper -->
+  <main class="page-container">
+
+    <section class="view-section active" id="view-home">
+      <div class="hero-section">
+        <div class="hero-copy">
+          <span class="eyebrow">Modern civic engagement</span>
+          <h1>Empowering Citizens. Improving Communities.</h1>
+          <p>Report potholes, streetlight failures, water leaks, waste management issues, and track resolutions in real-time.</p>
+          <div class="hero-actions">
+            <button class="btn btn-primary" id="hero-report-btn"><i class="fa-solid fa-circle-plus"></i> Report an Issue</button>
+            <button class="btn btn-secondary" id="hero-track-btn"><i class="fa-solid fa-chart-line"></i> View Public Dashboard</button>
+          </div>
+          <div class="hero-highlights">
+            <div>
+              <strong>Fast response</strong>
+              <p>Clear status updates for every report.</p>
+            </div>
+            <div>
+              <strong>Community focus</strong>
+              <p>Engage citizens with accessible local action.</p>
+            </div>
+          </div>
+        </div>
+        <div class="hero-visual">
+          <img src="hero-illustration.svg" alt="Illustration of citizens and smart city engagement" class="hero-image">
+          <div class="hero-stat-card">
+            <span class="stat-label">Live service status</span>
+            <div style="display:flex;align-items:center;gap:1rem;">
+              <strong id="resolution-percentage">0%</strong>
+              <div style="flex:1; background:var(--bg-surface); border-radius:999px; height:12px; overflow:hidden;">
+                <div id="resolution-progress-bar" style="width:0%; height:100%; background:var(--primary);"></div>
+              </div>
+            </div>
+            <p>Active issue tracking across the community network.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="stats-grid">
+        <article class="stat-card">
+          <span class="stat-value" id="stat-total">0</span>
+          <p>Total Reports</p>
+        </article>
+        <article class="stat-card">
+          <span class="stat-value highlight-pending" id="stat-pending">0</span>
+          <p>Pending</p>
+        </article>
+        <article class="stat-card">
+          <span class="stat-value highlight-progress" id="stat-progress">0</span>
+          <p>In Progress</p>
+        </article>
+        <article class="stat-card">
+          <span class="stat-value highlight-resolved" id="stat-resolved">0</span>
+          <p>Resolved</p>
+        </article>
+      </div>
+
+      <div class="section-header">
+        <div>
+          <h2>Recent Public Complaints</h2>
+          <p>Browse the latest local reports and civic action items.</p>
+        </div>
+        <select id="home-issue-filter" class="form-input select-filter">
+          <option value="">All Issue Types</option>
+          <option value="Pothole">Pothole</option>
+          <option value="Broken Streetlight">Broken Streetlight</option>
+          <option value="Trash Pile">Trash Pile</option>
+          <option value="Water Leakage">Water Leakage</option>
+          <option value="Sewage Overflow">Sewage Overflow</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+
+      <div class="complaints-grid" id="home-complaints-grid"></div>
+    </section>
+
+    <!-- 2. LOGIN / REGISTRATION VIEW -->
+    <section class="view-section" id="view-auth">
+      <div class="auth-wrapper glass-panel">
+        <div class="auth-tabs">
+          <button class="auth-tab-btn active" id="tab-login-btn">Sign In</button>
+          <button class="auth-tab-btn" id="tab-register-btn">Create Account</button>
+        </div>
+        
+        <!-- Login Form -->
+        <div class="auth-form active" id="form-login">
+          <form id="login-form-element">
+            <div class="form-group">
+              <label class="form-label" for="login-email">Email Address</label>
+              <input type="email" id="login-email" class="form-input" placeholder="citizen@civic.org or admin@civic.org" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="login-password">Password</label>
+              <input type="password" id="login-password" class="form-input" placeholder="Password (e.g. citizen123 / admin123)" required>
+            </div>
+            <button type="submit" class="btn btn-primary w-100 mt-4">
+              <i class="fa-solid fa-right-to-bracket"></i> Login
+            </button>
+          </form>
+          <div style="margin-top: 1.5rem; text-align: center; font-size: 0.85rem; color: var(--text-muted);">
+            <p>Demo Citizens: <code>citizen@civic.org</code> / <code>citizen123</code></p>
+            <p class="mt-4">Demo Admin: <code>admin@civic.org</code> / <code>admin123</code></p>
+          </div>
+        </div>
+        
+        <!-- Register Form -->
+        <div class="auth-form" id="form-register">
+          <form id="register-form-element">
+            <div class="form-group">
+              <label class="form-label" for="register-name">Full Name</label>
+              <input type="text" id="register-name" class="form-input" placeholder="John Doe" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="register-email">Email Address</label>
+              <input type="email" id="register-email" class="form-input" placeholder="john.doe@example.com" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="register-password">Password</label>
+              <input type="password" id="register-password" class="form-input" placeholder="Create a password" required>
+            </div>
+            <button type="submit" class="btn btn-primary w-100 mt-4">
+              <i class="fa-solid fa-user-plus"></i> Register Account
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. REPORT ISSUE FORM VIEW -->
+    <section class="view-section" id="view-report">
+      <div class="section-header">
+        <h2>Report a New Civic Issue</h2>
+      </div>
+      
+      <div class="report-grid">
+        <!-- Left: Form -->
+        <div class="glass-panel" style="padding: 2rem;">
+          <form id="report-issue-form-element">
+            
+            <div class="form-group">
+              <label class="form-label" for="report-issue-type">Issue Type</label>
+              <select id="report-issue-type" class="form-input" required>
+                <option value="" disabled selected>Select an issue category</option>
+                <option value="Pothole">Pothole</option>
+                <option value="Broken Streetlight">Broken Streetlight</option>
+                <option value="Trash Pile">Trash Pile</option>
+                <option value="Water Leakage">Water Leakage</option>
+                <option value="Sewage Overflow">Sewage Overflow</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label" for="report-priority">Estimated Priority</label>
+              <select id="report-priority" class="form-input">
+                <option value="Low">Low - Convenient Repair</option>
+                <option value="Medium" selected>Medium - Urgent Repair</option>
+                <option value="High">High - Danger / Safety Hazard</option>
+              </select>
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label" for="report-description">Description</label>
+              <textarea id="report-description" class="form-input" rows="4" placeholder="Describe the issue in detail. What needs fixing? Any safety hazards?" required></textarea>
+            </div>
+            
+            <!-- File Upload & Preset Options -->
+            <div class="form-group">
+              <label class="form-label">Upload Photo</label>
+              <div class="file-dropzone" id="file-dropzone">
+                <i class="fa-solid fa-cloud-arrow-up file-dropzone-icon"></i>
+                <p style="font-weight: 600; margin-bottom: 0.25rem;">Drag & drop image here or click to browse</p>
+                <p style="font-size: 0.75rem; color: var(--text-muted);">Supports JPG, PNG, SVG (Max 5MB)</p>
+                <input type="file" id="report-image-input" accept="image/*">
+              </div>
+              <div class="file-preview" id="file-preview">
+                <img id="file-preview-img" src="" alt="Selected file preview">
+                <button type="button" class="btn btn-secondary" id="clear-image-btn" style="padding: 0.25rem 0.75rem; font-size: 0.8rem; margin-top: 0.5rem; display: block; margin-left: auto; margin-right: auto;">
+                  <i class="fa-solid fa-trash"></i> Remove Photo
+                </button>
+              </div>
+              
+              <!-- Quick Preset Mock Selector -->
+              <div class="preset-photo-label">
+                <span style="font-size: 0.75rem; font-weight: bold; color: var(--text-muted);">OR USE DEMO PHOTO PRESET:</span>
+              </div>
+              <div class="preset-photos" id="preset-photo-selector">
+                <div class="preset-photo-option" data-filename="pothole.svg" title="Pothole">
+                  <img src="uploads/pothole.svg" alt="Pothole">
+                </div>
+                <div class="preset-photo-option" data-filename="broken_light.svg" title="Streetlight">
+                  <img src="uploads/broken_light.svg" alt="Streetlight">
+                </div>
+                <div class="preset-photo-option" data-filename="water_leak.svg" title="Water Leak">
+                  <img src="uploads/water_leak.svg" alt="Water Leak">
+                </div>
+                <div class="preset-photo-option" data-filename="" title="No Image" class="selected">
+                  <div style="background: rgba(255,255,255,0.05); width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: bold; color: var(--text-muted);">None</div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label" for="report-address">Geo Address Location</label>
+              <input type="text" id="report-address" class="form-input" placeholder="Select a point on the map or type address..." required>
+            </div>
+            
+            <!-- Hidden Fields for Location Lat/Lng -->
+            <input type="hidden" id="report-latitude">
+            <input type="hidden" id="report-longitude">
+            
+            <button type="submit" class="btn btn-primary w-100 mt-4">
+              <i class="fa-solid fa-paper-plane"></i> Submit Complaint
+            </button>
+          </form>
+        </div>
+        
+        <!-- Right: Map Picker & Nearby Complaints -->
+        <div style="display: flex; flex-direction: column; gap: 2rem;">
+          <div class="glass-panel" style="padding: 1.5rem;">
+            <h3 style="margin-bottom: 0.5rem;"><i class="fa-solid fa-map-location-dot" style="color: #6366f1;"></i> Pin Issue Location</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1rem;">Click on the map or drag the purple pin to pinpoint the exact location of the issue.</p>
+            <div id="report-map" class="map-container"></div>
+            <div style="display: flex; gap: 1rem; font-size: 0.75rem; color: var(--text-muted);">
+              <span>Lat: <strong id="coord-lat">--</strong></span>
+              <span>Lng: <strong id="coord-lng">--</strong></span>
+            </div>
+          </div>
+          
+          <!-- Proximity Alerts (Anti-Duplicate Check) -->
+          <div class="glass-panel nearby-panel" id="nearby-panel" style="display: none;">
+            <h3>
+              <i class="fa-solid fa-triangle-exclamation" style="color: #f59e0b;"></i> 
+              Nearby Similar Issues
+            </h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">We detected similar open complaints nearby. Make sure your issue isn't already reported!</p>
+            <div class="nearby-list" id="nearby-complaints-list">
+              <!-- Populated dynamically -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. MY COMPLAINTS VIEW -->
+    <section class="view-section" id="view-my-complaints">
+      <div class="filter-bar">
+        <h2>My Reported Complaints</h2>
+        
+        <div style="display: flex; gap: 0.75rem;">
+          <select id="user-status-filter" class="form-input" style="width: 150px; font-size: 0.85rem;">
+            <option value="">All Statuses</option>
+            <option value="Pending">Pending</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Resolved">Resolved</option>
+          </select>
+        </div>
+      </div>
+      
+      <div class="complaints-grid" id="user-complaints-grid">
+        <!-- Rendered dynamically -->
+      </div>
+      
+      <!-- Empty state illustration -->
+      <div id="user-empty-state" class="glass-panel text-center" style="padding: 4rem; display: none;">
+        <i class="fa-solid fa-clipboard-question" style="font-size: 4rem; color: var(--text-muted); margin-bottom: 1.5rem;"></i>
+        <h3>No Complaints Logged</h3>
+        <p style="color: var(--text-muted); max-width: 400px; margin: 0.5rem auto 1.5rem;">You haven't reported any civic issues yet. Click below to file your first complaint.</p>
+        <button class="btn btn-primary" id="empty-state-report-btn">
+          <i class="fa-solid fa-circle-plus"></i> Report Issue Now
+        </button>
+      </div>
+    </section>
+
+    <!-- 5. ADMIN DASHBOARD VIEW -->
+    <section class="view-section" id="view-admin">
+      <div class="admin-container">
+        <div class="admin-header-row">
+          <h2>Administrative Control Center</h2>
+          <div style="display: flex; gap: 0.75rem; align-items: center;">
+            <select id="admin-table-status-filter" class="form-input" style="width: 160px; font-size: 0.85rem;">
+              <option value="">Filter By Status</option>
+              <option value="Pending">Pending</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Resolved">Resolved</option>
+            </select>
+          </div>
+        </div>
+        
+        <!-- Live Admin Stat Badges -->
+        <div class="admin-stats-summary">
+          <div class="glass-panel" style="padding: 1rem 1.5rem; border-left: 4px solid #6366f1;">
+            <span style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase;">Total Cases</span>
+            <h3 style="font-size: 1.75rem;" id="admin-stat-total">0</h3>
+          </div>
+          <div class="glass-panel" style="padding: 1rem 1.5rem; border-left: 4px solid var(--status-pending);">
+            <span style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase;">Pending Action</span>
+            <h3 style="font-size: 1.75rem; color: var(--status-pending);" id="admin-stat-pending">0</h3>
+          </div>
+          <div class="glass-panel" style="padding: 1rem 1.5rem; border-left: 4px solid var(--status-progress);">
+            <span style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase;">In Progress</span>
+            <h3 style="font-size: 1.75rem; color: var(--status-progress);" id="admin-stat-progress">0</h3>
+          </div>
+          <div class="glass-panel" style="padding: 1rem 1.5rem; border-left: 4px solid var(--status-resolved);">
+            <span style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase;">Resolved Cases</span>
+            <h3 style="font-size: 1.75rem; color: var(--status-resolved);" id="admin-stat-resolved">0</h3>
+          </div>
+        </div>
+        
+        <!-- Complaint Management Table -->
+        <div class="glass-panel admin-table-container">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Issue Type</th>
+                <th>Priority</th>
+                <th>Location</th>
+                <th>Date Filed</th>
+                <th>Status</th>
+                <th style="text-align: right;">Action</th>
+              </tr>
+            </thead>
+            <tbody id="admin-complaints-tbody">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+        
+        <!-- Simulated Email Log Viewer Panel -->
+        <div class="glass-panel email-log-panel" style="border-left: 4px solid #38bdf8;">
+          <h3 style="margin-bottom: 0.5rem;"><i class="fa-solid fa-envelope-open-text" style="color: #38bdf8;"></i> Outbox: Email Notifications</h3>
+          <p style="font-size: 0.8rem; color: var(--text-muted);">Inspection console for automated email alerts triggered by the system on registration, lodging, and resolution updates.</p>
+          <div class="email-log-list" id="email-log-list">
+            <!-- Populated dynamically -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- DETAIL & TIMELINE MODAL OVERLAY -->
+  <div class="modal-overlay" id="detail-modal-overlay">
+    <div class="detail-modal glass-panel">
+      <button class="close-modal-btn" id="close-modal-btn">&times;</button>
+      
+      <h2 id="modal-title" style="font-size: 1.75rem; margin-bottom: 0.25rem;">Complaint Title</h2>
+      <span class="badge" id="modal-status-badge">Status</span>
+      
+      <div class="details-grid">
+        <!-- Left Column: Details & Map -->
+        <div>
+          <div class="complaint-img-container" style="border-radius: var(--border-radius-md); height: 220px; margin-bottom: 1.5rem;">
+            <img id="modal-image" class="complaint-img" src="" alt="Complaint attachment">
+          </div>
+          
+          <div class="detail-info-block">
+            <h3>Complaint Details</h3>
+            <div class="detail-meta-list">
+              <div class="detail-meta-item">
+                <span>Complaint ID</span>
+                <span id="modal-id">#100</span>
+              </div>
+              <div class="detail-meta-item">
+                <span>Priority Level</span>
+                <span id="modal-priority">Medium</span>
+              </div>
+              <div class="detail-meta-item">
+                <span>Location Address</span>
+                <span id="modal-address" style="text-align: right; max-width: 60%;">Times Square, NY</span>
+              </div>
+              <div class="detail-meta-item">
+                <span>Date Lodged</span>
+                <span id="modal-date">June 15, 2026</span>
+              </div>
+              <div class="detail-meta-item">
+                <span>Community Support</span>
+                <span id="modal-seconds-count" style="font-weight: 700; color: var(--primary);">0 Seconds</span>
+              </div>
+            </div>
+            
+            <p id="modal-description" style="font-size: 0.95rem; color: var(--text-muted); background: rgba(255,255,255,0.02); padding: 1rem; border-radius: 8px; border: 1px solid var(--border-glass);">
+              Issue description text goes here.
+            </p>
+          </div>
+        </div>
+        
+        <!-- Right Column: Timeline & Admin Action Form -->
+        <div style="display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <h3 style="margin-bottom: 0.5rem;"><i class="fa-solid fa-timeline" style="color: #6366f1;"></i> Resolution Timeline</h3>
+            <div class="timeline" id="modal-timeline">
+              <!-- Nodes populated dynamically -->
+            </div>
+          </div>
+          
+          <!-- Admin Action Form (Hidden by default, visible for admin) -->
+          <div class="admin-control-box" id="modal-admin-control-panel" style="display: none;">
+            <h4><i class="fa-solid fa-shield-halved"></i> Administrator Action Panel</h4>
+            <form id="admin-update-form">
+              <div class="admin-control-flex">
+                <div class="form-group">
+                  <label class="form-label" for="admin-update-status">Set Status</label>
+                  <select id="admin-update-status" class="form-input">
+                    <option value="Pending">Pending</option>
+                    <option value="In Progress">In Progress</option>
+                    <option value="Resolved">Resolved</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="admin-update-priority">Set Priority</label>
+                  <select id="admin-update-priority" class="form-input">
+                    <option value="Low">Low</option>
+                    <option value="Medium">Medium</option>
+                    <option value="High">High</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="admin-update-message">Status Update Message</label>
+                <textarea id="admin-update-message" class="form-input" rows="2" placeholder="Send update description to citizen. This will trigger an email alert..." required></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary w-100" style="padding: 0.6rem 1rem;">
+                <i class="fa-solid fa-square-check"></i> Commit Status Update
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container"></div>
+
+  <!-- Sticky Footer -->
+  <footer>
+      <div class="footer-text">
+      <p>&copy; 2026 PeopleVoice. Mini Project for Crowdsourced Civic Issues Resolution.</p>
+      <p style="font-size: 0.75rem; color: rgba(30, 41, 59, 0.6); margin-top: 0.5rem;">Powered by Node.js, Express, and Google Maps.</p>
+    </div>
+  </footer>
+
+  <!-- Google Maps API for Map -->
+  <script src="https://maps.googleapis.com/maps/api/js?libraries=places"></script>
+  
+  <!-- Frontend Logic -->
+  <script src="app.js"></script>
+</body>
+</html>
