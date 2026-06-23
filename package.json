@@ -1,0 +1,16 @@
+{
+  "name": "civic-resolve",
+  "version": "1.0.0",
+  "description": "Crowdsourced Civic Issue Reporting and Resolution System",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "multer": "^1.4.5-lts.1"
+  },
+  "author": "Antigravity",
+  "license": "ISC"
+}
